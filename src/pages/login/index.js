@@ -3,12 +3,11 @@ import logo from "../../assets/logo.svg";
 import { theme } from "../../styles/theme";
 import { LoginStyled } from "./styled";
 import { useNavigate } from "react-router-dom";
-import { goToSignup, goToCommentary } from "../../routes/coordinator";
+import { goToSignup, goToPosts } from "../../routes/coordinator";
 import {
   Heading,
   Text,
   FormControl,
-  FormErrorMessage,
   Input,
   Button,
   Divider,
@@ -17,17 +16,21 @@ import {
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [errorEmail, setErrorEmail] = useState(true);
+  const [errorPassword, setErrorPassword] = useState(true);
 
   const onChangeInputs = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  const isError = form === "";
-
   const onSubmit = () => {
-    console.log(form);
-    goToCommentary(navigate);
+    form.email === "" ? setErrorEmail(false) : setErrorEmail(true);
+    form.password === "" ? setErrorPassword(false) : setErrorPassword(true);
+
+    if (form.email !== "" && form.password !== "") {
+      goToPosts(navigate);
+    }
   };
 
   return (
@@ -41,11 +44,11 @@ export const LoginPage = () => {
         O projeto de rede social da Labenu
       </Text>
 
-      <FormControl isInvalid={isError} onSubmit={onSubmit}>
+      <FormControl onSubmit={onSubmit}>
         <Input
           focusBorderColor="none"
           _placeholder={{ color: theme.color.placeHolder }}
-          borderColor={theme.color.inputBorderColor}
+          borderColor={errorEmail ? `${theme.color.inputBorderColor}` : "red"}
           w={theme.sizes.width.inputWidth}
           h={theme.sizes.heigth.inputHeight}
           mb="8px"
@@ -55,16 +58,20 @@ export const LoginPage = () => {
           value={form.email}
           onChange={onChangeInputs}
         />
-        {!isError ? (
+        {errorEmail ? (
           <></>
         ) : (
-          <FormErrorMessage>É necessário o email.</FormErrorMessage>
+          <Text mb="10px" color="red" fontWeight={theme.fontWeights.bold}>
+            É necessário o email.
+          </Text>
         )}
 
         <Input
           focusBorderColor="none"
           _placeholder={{ color: theme.color.placeHolder }}
-          borderColor={theme.color.inputBorderColor}
+          borderColor={
+            errorPassword ? `${theme.color.inputBorderColor}` : "red"
+          }
           w={theme.sizes.width.inputWidth}
           h={theme.sizes.heigth.inputHeight}
           placeholder="Password"
@@ -73,10 +80,12 @@ export const LoginPage = () => {
           value={form.password}
           onChange={onChangeInputs}
         />
-        {!isError ? (
+        {errorPassword ? (
           <></>
         ) : (
-          <FormErrorMessage>É necessário o password.</FormErrorMessage>
+          <Text color="red" fontWeight={theme.fontWeights.bold}>
+            É necessário o password.
+          </Text>
         )}
         <Button
           mt="56px"

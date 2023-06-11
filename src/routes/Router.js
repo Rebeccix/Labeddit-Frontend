@@ -7,7 +7,7 @@ export const Router = () => {
             <Routes>
                 <Route index element={<LoginPage/>}/>
                 <Route path="/signup" element={<SignupPage/>}/>
-                <Route path="/post" element={<PostsPage/>}/>
+                <Route path="/posts" element={<PostsPage/>}/>
                 <Route path="/commentary" element={<CommentaryPage/>}/>
             </Routes>
         </BrowserRouter>

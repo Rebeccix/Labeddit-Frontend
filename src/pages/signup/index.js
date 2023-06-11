@@ -5,18 +5,20 @@ import {
   Heading,
   Text,
   FormControl,
-  FormErrorMessage,
   Input,
   Button,
   Checkbox,
   Highlight,
 } from "@chakra-ui/react";
 import { SignupStyled } from "./styled";
-import { goToCommentary } from "../../routes/coordinator";
+import { goToPosts } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
 
 export const SignupPage = () => {
   const [form, setForm] = useState({ nickname: "", email: "", password: "" });
+  const [errorEmptyNickname, setErrorEmptyNickname] = useState(true);
+  const [errorEmptyEmail, setErrorEmptyEmail] = useState(true);
+  const [errorEmptyPassword, setErrorEmptyPassword] = useState(true);
   const [checkbox, setCheckbox] = useState(false);
   const navigate = useNavigate()
 
@@ -26,16 +28,21 @@ export const SignupPage = () => {
 
   const onChangeInputs = (e) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm({ ...form, [name]: value });  
   };
 
-  const isError = form === "";
-
   const onSubmit = () => {
-    checkbox === true ? 
-    goToCommentary(navigate) 
-    : 
-    console.log("num pode");
+    form.nickname === "" ? setErrorEmptyNickname(false) : setErrorEmptyNickname(true);
+    form.email === "" ? setErrorEmptyEmail(false) : setErrorEmptyEmail(true);
+    form.password === "" ? setErrorEmptyPassword(false) : setErrorEmptyPassword(true);
+
+    if (form.email !== "" && 
+        form.password !== "" &&  
+        form.nickname !== "" && 
+        checkbox === true
+        ) {
+          goToPosts(navigate);
+    }
   };
   return (
     <>
@@ -45,7 +52,7 @@ export const SignupPage = () => {
           Olá, boas vindas ao LabEddit ;&#41;
         </Heading>
 
-        <FormControl isInvalid={isError} onSubmit={onSubmit}>
+        <FormControl onSubmit={onSubmit}>
           <Input
             focusBorderColor="none"
             _placeholder={{ color: theme.color.placeHolder }}
@@ -59,11 +66,13 @@ export const SignupPage = () => {
             value={form.nickname}
             onChange={onChangeInputs}
           />
-          {!isError ? (
-            <></>
-          ) : (
-            <FormErrorMessage>É necessário um Apelido.</FormErrorMessage>
-          )}
+        {errorEmptyNickname ? (
+          <></>
+        ) : (
+          <Text mb="10px" color="red" fontWeight={theme.fontWeights.bold}>
+            É necessário um nickname.
+          </Text>
+        )}
 
           <Input
             focusBorderColor="none"
@@ -78,11 +87,13 @@ export const SignupPage = () => {
             value={form.email}
             onChange={onChangeInputs}
           />
-          {!isError ? (
-            <></>
-          ) : (
-            <FormErrorMessage>É necessário o E-mail.</FormErrorMessage>
-          )}
+        {errorEmptyEmail ? (
+          <></>
+        ) : (
+          <Text mb="10px" color="red" fontWeight={theme.fontWeights.bold}>
+            É necessário um E-mail.
+          </Text>
+        )}
 
           <Input
             focusBorderColor="none"
@@ -96,11 +107,13 @@ export const SignupPage = () => {
             value={form.password}
             onChange={onChangeInputs}
           />
-          {!isError ? (
-            <></>
-          ) : (
-            <FormErrorMessage>É necessário o password.</FormErrorMessage>
-          )}
+        {errorEmptyPassword ? (
+          <></>
+        ) : (
+          <Text color="red" fontWeight={theme.fontWeights.bold}>
+            É necessário um Password.
+          </Text>
+        )}
 
           <Text
             mt="65px"

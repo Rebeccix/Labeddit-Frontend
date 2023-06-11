@@ -6,10 +6,12 @@ export const theme = extendTheme({
     button: "Noto Sans",
   },
   fontSizes: {
+    likeDislikeCommentButton: "0.625rem",
     sendedby: "0.75rem",
     checkboxText: "0.875rem",
     text: "1rem",
     button: "1.125rem",
+    post: "1.125rem",
     h1WelcomeMessage: "2.063rem",
     header: "2.25rem"
   },
@@ -24,7 +26,11 @@ export const theme = extendTheme({
     placeHolder: "#323941",
     buttonCreateAccount: "#FE7E02",
     buttonGradient: "linear(to-l, #FF6489, #F9B24E)",
-    bgHeader: "#EDEDED"
+    bgHeader: "#EDEDED",
+    postBg: "#FBFBFB",
+    postBorderColor: "#E0E0E0",
+    postTextColor: "#6F6F6F",
+    likeDislikeCommentButtonColor : "#6F6F6F"
   },
   sizes: {
     width: {
