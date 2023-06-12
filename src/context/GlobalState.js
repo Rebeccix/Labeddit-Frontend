@@ -25,8 +25,26 @@ export const GlobalState = (props) => {
       commentary: 6317,
     },
   ]);
+  let [comments, setComments] = useState([
+    {
+      id: 1,
+      sendedBy: "labeuno12",
+      comment: "teste 1",
+      likes: 164,
+    },    {
+      id: 2,
+      sendedBy: "labeuno1999",
+      comment: "teste 2",
+      likes: 2521,
+    },    {
+      id: 3,
+      sendedBy: "labeuno6443",
+      comment: "teste 3",
+      likes: 12,
+    }
+  ])
 
-  let data = {posts, setPosts};
+  let data = {posts, setPosts, comments, setComments};
 
   return (
     <GlobalContext.Provider value={data}>

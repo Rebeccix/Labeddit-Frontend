@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { theme } from "../../styles/theme";
 
 export const PostsCardStyled = styled.div`
-    padding: 32px 30px 0 30px;
-
     .Container-posts {
         margin-bottom: 10px;
 

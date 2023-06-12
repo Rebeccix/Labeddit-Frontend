@@ -61,8 +61,8 @@ export const PostsPage = () => {
           w="100%"
           bgGradient={theme.color.buttonGradient}
         />
-      </PostsStyled>
       <PostCard/>
+      </PostsStyled>
     </>
   );
 };
