@@ -3,32 +3,42 @@ import { Header, PostCard } from "../../components";
 import { Textarea, Button, Divider } from "@chakra-ui/react";
 import { theme } from "../../styles/theme";
 import { PostsStyled } from "./styled"
+import { useProtectedPage } from "../../hooks/useProtectedPage"
+import { BASE_URL } from "../../constants/url"
 import { GlobalContext } from "../../context/GlobalContext";
+import axios from "axios";
 
 export const PostsPage = () => {
   let [textBox, setTextBox] = useState("");
   let [isValidTextarea, setIsValidTextarea] = useState(false)
+
+  const context = useContext(GlobalContext)
+
+  const { getPosts } = context
   
-  const context = useContext(GlobalContext);
-  const { posts, setPosts } = context;
+  useProtectedPage()
 
   const onChangeInputs = (e) => {
     setTextBox(e.target.value);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if( textBox === "" ) {
       setIsValidTextarea(true)
     } else {
       setIsValidTextarea(false)
-      setPosts([...posts, {
-        id: Date.now(),
-        sendedBy: 'Casquinha doce',
-        post: textBox,
-        likes: '12k',
-        commentary: '7k'
-      }])
-      setTextBox('')
+
+      try {
+        await axios.post(`${BASE_URL}/posts`, {content: textBox}, {
+          headers: {
+           Authorization: localStorage.getItem("token")
+          }
+        })
+        setTextBox('')
+        getPosts()
+      } catch (error) {
+        alert(error.response.data.message)
+      }
     }
   };
 

@@ -12,6 +12,8 @@ import {
   Button,
   Divider,
 } from "@chakra-ui/react";
+import axios from "axios"
+import { BASE_URL } from "../../constants/url";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,12 +26,20 @@ export const LoginPage = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    // event.preventDefault()
     form.email === "" ? setErrorEmail(false) : setErrorEmail(true);
     form.password === "" ? setErrorPassword(false) : setErrorPassword(true);
 
     if (form.email !== "" && form.password !== "") {
-      goToPosts(navigate);
+        await axios.post(`${BASE_URL}/users/login`, form)
+        .then((res) => {
+          localStorage.setItem("token", res.data.token)
+          goToPosts(navigate);
+        })
+        .catch((err) => {
+          alert(err.response.data.message)
+        })
     }
   };
 

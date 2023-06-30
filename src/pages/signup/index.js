@@ -13,6 +13,8 @@ import {
 import { SignupStyled } from "./styled";
 import { goToPosts } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "../../constants/url";
 
 export const SignupPage = () => {
   const [form, setForm] = useState({ nickname: "", email: "", password: "" });
@@ -31,7 +33,7 @@ export const SignupPage = () => {
     setForm({ ...form, [name]: value });  
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     form.nickname === "" ? setErrorEmptyNickname(false) : setErrorEmptyNickname(true);
     form.email === "" ? setErrorEmptyEmail(false) : setErrorEmptyEmail(true);
     form.password === "" ? setErrorEmptyPassword(false) : setErrorEmptyPassword(true);
@@ -41,7 +43,14 @@ export const SignupPage = () => {
         form.nickname !== "" && 
         checkbox === true
         ) {
-          goToPosts(navigate);
+          try {
+            const response = await axios.post(`${BASE_URL}/users/signup`, form)
+
+            localStorage.setItem("token", response.data.token)
+            goToPosts(navigate);
+          } catch (error) {
+            alert(error.response.data.message)
+          }
     }
   };
   return (
