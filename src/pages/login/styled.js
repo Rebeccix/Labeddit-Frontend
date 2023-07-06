@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const LoginStyled = styled.div`
-    height: 100vh;
+    min-height: 110vh;
     width: 100vw;
     display: flex;
     flex-direction: column;

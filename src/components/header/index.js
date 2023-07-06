@@ -2,23 +2,40 @@ import { HeaderStyled } from "./styled";
 import { logo, exit } from "../../assets";
 import { Button, Image, Spacer, Box } from "@chakra-ui/react";
 import { theme } from "../../styles/theme";
-import { goToLogin } from "../../routes/coordinator";
+import { goToLogin, goToPosts } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const href = window.location.href;
   const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    goToLogin(navigate);
+  };
   return (
     <HeaderStyled>
       {href.includes("commentary") ? (
         <Box w="55px">
-          <Image boxSize="25px" src={exit} alt="" />
+          <Button variant="link">
+          <Image boxSize="25px" src={exit} alt="" 
+          onClick={() => goToPosts(navigate)}
+          />
+          </Button>
         </Box>
       ) : (
         <Box w="55px" />
       )}
       <Spacer />
-      <Image boxSize="28px" src={logo} alt="" />
+      <Button variant="link">
+        <Image
+          boxSize="28px"
+          cursor="cursor"
+          src={logo}
+          alt=""
+          onClick={() => goToPosts(navigate)}
+        />
+      </Button>
       <Spacer />
       {href.includes("Signup") ? (
         <Button
@@ -38,7 +55,7 @@ export const Header = () => {
           h="25px"
           color={theme.color.headerButton}
           variant="link"
-          onClick={() => goToLogin(navigate)}
+          onClick={logout}
         >
           Logout
         </Button>

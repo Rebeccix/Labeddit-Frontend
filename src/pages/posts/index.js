@@ -9,14 +9,13 @@ import { GlobalContext } from "../../context/GlobalContext";
 import axios from "axios";
 
 export const PostsPage = () => {
+  useProtectedPage()
   let [textBox, setTextBox] = useState("");
   let [isValidTextarea, setIsValidTextarea] = useState(false)
 
   const context = useContext(GlobalContext)
 
   const { getPosts } = context
-  
-  useProtectedPage()
 
   const onChangeInputs = (e) => {
     setTextBox(e.target.value);

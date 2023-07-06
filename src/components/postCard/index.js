@@ -11,7 +11,7 @@ import axios from "axios";
 
 export const PostCard = () => {
   const context = useContext(GlobalContext);
-  const { posts, comments, getPosts } = context;
+  const { posts, comments, getPosts, getCommentaries, likeDislikePostButton } = context;
   const navigate = useNavigate();
   const href = window.location.href;
 
@@ -19,18 +19,20 @@ export const PostCard = () => {
     getPosts();
   }, []);
 
-  const likeDislikeButton = async (id, like) => {
+  const likeDislikeCommentaryButton = async (id, like) => {
     try {
       await axios.put(
-        `${BASE_URL}/posts/${id}/like`,
-        { like: like ? true : false },
+        `${BASE_URL}/commentary/${id}/like`,
+        {
+          like: like ? true : false,
+        },
         {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
         }
       );
-      getPosts()
+      getCommentaries(comments.id)
     } catch (error) {
       alert(error.response.data.message);
     }
@@ -58,7 +60,7 @@ export const PostCard = () => {
                         cursor="pointer"
                         src={like}
                         alt="botão de like"
-                        onClick={() => likeDislikeButton(data.id, true)}
+                        onClick={() => likeDislikePostButton(data.id, true)}
                       />
                       <Text
                         color={theme.color.likeDislikeCommentButtonColor}
@@ -70,7 +72,7 @@ export const PostCard = () => {
                         cursor="pointer"
                         src={dislike}
                         alt="botão de dislike"
-                        onClick={() => likeDislikeButton(data.id, false)}
+                        onClick={() => likeDislikePostButton(data.id, false)}
                       />
                     </Flex>
                     <Flex
@@ -94,31 +96,41 @@ export const PostCard = () => {
                 </div>
               );
             })
-          : comments.map((data) => {
+          : comments.commentaries.map((data) => {
               return (
-                <div className="Container-posts" key={data.id}>
+                <div className="Container-posts" key={data.idCommentary}>
                   <Text
                     fontSize={theme.fontSizes.sendedby}
                     color={theme.color.postTextColor}
                   >
-                    Enviado por: {data.sendedBy}
+                    Enviado por: {data.creatorName}
                   </Text>
                   <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
-                    {data.comment}
+                    {data.contentCommentary}
                   </Text>
                   <div>
                     <Flex align="space-between" w="98px" h="27.89px" mr="10px">
-                      <Image cursor="pointer" src={like} alt="botão de like" />
+                      <Image
+                        cursor="pointer"
+                        src={like}
+                        alt="botão de like"
+                        onClick={() =>
+                          likeDislikeCommentaryButton(data.idCommentary, true)
+                        }
+                      />
                       <Text
                         color={theme.color.likeDislikeCommentButtonColor}
                         fontSize={theme.fontSizes.likeDislikeCommentButton}
                       >
-                        {data.likes}
+                        {data.likeCommentary - data.dislikeCommentary}
                       </Text>
                       <Image
                         cursor="pointer"
                         src={dislike}
                         alt="botão de dislike"
+                        onClick={() =>
+                          likeDislikeCommentaryButton(data.idCommentary, false)
+                        }
                       />
                     </Flex>
                   </div>

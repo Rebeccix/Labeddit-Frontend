@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { logo } from "../../assets"
+import { logo } from "../../assets";
 import { theme } from "../../styles/theme";
 import { LoginStyled } from "./styled";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ import {
   Button,
   Divider,
 } from "@chakra-ui/react";
-import axios from "axios"
+import axios from "axios";
 import { BASE_URL } from "../../constants/url";
 
 export const LoginPage = () => {
@@ -27,26 +27,32 @@ export const LoginPage = () => {
   };
 
   const onSubmit = async () => {
-    // event.preventDefault()
     form.email === "" ? setErrorEmail(false) : setErrorEmail(true);
     form.password === "" ? setErrorPassword(false) : setErrorPassword(true);
 
     if (form.email !== "" && form.password !== "") {
-        await axios.post(`${BASE_URL}/users/login`, form)
+      await axios
+        .post(`${BASE_URL}/users/login`, form)
         .then((res) => {
-          localStorage.setItem("token", res.data.token)
+          localStorage.setItem("token", res.data.token);
           goToPosts(navigate);
         })
         .catch((err) => {
-          alert(err.response.data.message)
-        })
+          alert(err.message);
+        });
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.code === "Enter") {
+      onSubmit();
     }
   };
 
   return (
     <LoginStyled>
       <img src={logo} alt="" />
-      <Heading>LabEddit</Heading>
+      <Heading fontSize={["1.875rem", "2.25rem"]}>LabEddit</Heading>
       <Text
         fontWeight={theme.fontWeights.normal}
         fontSize={theme.fontSizes.text}
@@ -66,6 +72,7 @@ export const LoginPage = () => {
           type="email"
           name="email"
           value={form.email}
+          onKeyDown={handleKeyPress}
           onChange={onChangeInputs}
         />
         {errorEmail ? (
@@ -89,6 +96,7 @@ export const LoginPage = () => {
           name="password"
           value={form.password}
           onChange={onChangeInputs}
+          onKeyDown={handleKeyPress}
         />
         {errorPassword ? (
           <></>
@@ -99,7 +107,7 @@ export const LoginPage = () => {
         )}
         <Button
           mt="56px"
-          w={theme.sizes.width.buttonWidth}
+          w={[theme.sizes.width.buttonWidth, "70vw", "50vw"]}
           h={theme.sizes.heigth.buttonHeight}
           borderRadius={theme.sizes.width.buttonBorderRadius}
           color="white"
@@ -112,13 +120,13 @@ export const LoginPage = () => {
       </FormControl>
       <Divider
         h="1.5px"
-        w="100%"
+        w={["100%", "70vw", "50vw"]}
         mt="18px"
         mb="18px"
         bgGradient={theme.color.buttonGradient}
       />
       <Button
-        w={theme.sizes.width.buttonWidth}
+        w={[theme.sizes.width.buttonWidth, "70vw", "50vw"]}
         h={theme.sizes.heigth.buttonHeight}
         variant="outline"
         borderRadius={theme.sizes.width.buttonBorderRadius}
