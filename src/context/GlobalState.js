@@ -6,6 +6,15 @@ import { BASE_URL } from "../constants/url";
 export const GlobalState = (props) => {
   let [posts, setPosts] = useState([]);
   let [comments, setComments] = useState([])
+  let [alert, setAlert] = useState([])
+  const [popUp, setPopUp] = useState(true)
+
+  const setAlertInfo = (text, type) => {
+    setAlert({
+      text,
+      type
+    })
+  }
 
   const getPosts = () => {
     axios.get(`${BASE_URL}/posts`, {
@@ -49,7 +58,7 @@ export const GlobalState = (props) => {
     }
   };
 
-  let data = {posts, setPosts, comments, setComments, getPosts, getCommentaries, likeDislikePostButton};
+  let data = {posts, setPosts, comments, setComments, getPosts, getCommentaries, likeDislikePostButton, alert ,setAlert, popUp, setPopUp};
 
   return (
     <GlobalContext.Provider value={data}>

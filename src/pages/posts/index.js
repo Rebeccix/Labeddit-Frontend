@@ -2,41 +2,46 @@ import { useContext, useState } from "react";
 import { Header, PostCard } from "../../components";
 import { Textarea, Button, Divider } from "@chakra-ui/react";
 import { theme } from "../../styles/theme";
-import { PostsStyled } from "./styled"
-import { useProtectedPage } from "../../hooks/useProtectedPage"
-import { BASE_URL } from "../../constants/url"
+import { PostsStyled } from "./styled";
+import { useProtectedPage } from "../../hooks/useProtectedPage";
+import { BASE_URL } from "../../constants/url";
 import { GlobalContext } from "../../context/GlobalContext";
+
 import axios from "axios";
 
 export const PostsPage = () => {
-  useProtectedPage()
+  useProtectedPage();
   let [textBox, setTextBox] = useState("");
-  let [isValidTextarea, setIsValidTextarea] = useState(false)
+  let [isValidTextarea, setIsValidTextarea] = useState(false);
 
-  const context = useContext(GlobalContext)
+  const context = useContext(GlobalContext);
 
-  const { getPosts } = context
+  const { getPosts } = context;
 
   const onChangeInputs = (e) => {
     setTextBox(e.target.value);
   };
 
   const onSubmit = async () => {
-    if( textBox === "" ) {
-      setIsValidTextarea(true)
+    if (textBox === "") {
+      setIsValidTextarea(true);
     } else {
-      setIsValidTextarea(false)
+      setIsValidTextarea(false);
 
       try {
-        await axios.post(`${BASE_URL}/posts`, {content: textBox}, {
-          headers: {
-           Authorization: localStorage.getItem("token")
+        await axios.post(
+          `${BASE_URL}/posts`,
+          { content: textBox },
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
           }
-        })
-        setTextBox('')
-        getPosts()
+        );
+        setTextBox("");
+        getPosts();
       } catch (error) {
-        alert(error.response.data.message)
+        alert(error.response.data);
       }
     }
   };
@@ -46,7 +51,7 @@ export const PostsPage = () => {
       <Header />
       <PostsStyled>
         <Textarea
-          isInvalid={isValidTextarea} 
+          isInvalid={isValidTextarea}
           value={textBox}
           onChange={onChangeInputs}
           placeholder="Escreva seu post..."
@@ -70,7 +75,7 @@ export const PostsPage = () => {
           w="100%"
           bgGradient={theme.color.buttonGradient}
         />
-      <PostCard/>
+        <PostCard />
       </PostsStyled>
     </>
   );

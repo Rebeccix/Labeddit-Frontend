@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { theme } from "../../styles/theme";
 import { Header } from "../../components/header";
+import { ErrorMessage } from "../../components/errorMessage";
 import {
   Heading,
   Text,
@@ -9,12 +10,15 @@ import {
   Button,
   Checkbox,
   Highlight,
+  Slide,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { SignupStyled } from "./styled";
 import { goToPosts } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../constants/url";
+import { GlobalContext } from "../../context/GlobalContext";
 
 export const SignupPage = () => {
   const [form, setForm] = useState({ nickname: "", email: "", password: "" });
@@ -23,6 +27,12 @@ export const SignupPage = () => {
   const [errorEmptyPassword, setErrorEmptyPassword] = useState(true);
   const [checkbox, setCheckbox] = useState(false);
   const navigate = useNavigate();
+
+  const context = useContext(GlobalContext);
+
+  const { popUp, setPopUp, setAlert } = context;
+
+  const { isOpen, onToggle } = useDisclosure();
 
   const onchange = (e) => {
     setCheckbox(e);
@@ -58,7 +68,9 @@ export const SignupPage = () => {
         localStorage.setItem("token", response.data.token);
         goToPosts(navigate);
       } catch (error) {
-        alert(error.response.data.message);
+        onToggle();
+        setPopUp(false);
+        setAlert(error.response.data);
       }
     }
   };
@@ -69,8 +81,18 @@ export const SignupPage = () => {
     }
   };
 
+  if (!popUp) {
+    setTimeout(() => {
+      onToggle();
+      setPopUp(true);
+    }, 7000);
+  }
+
   return (
     <>
+      <Slide direction="left" in={isOpen}>
+        <ErrorMessage />
+      </Slide>
       <Header />
       <SignupStyled>
         <Heading
