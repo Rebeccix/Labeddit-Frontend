@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import { ErrorStyled } from "./styled";
-import { Box } from "@chakra-ui/react";
+import { Box, Badge } from "@chakra-ui/react";
 
 export const ErrorMessage = () => {
   const context = useContext(GlobalContext);
@@ -12,17 +12,17 @@ export const ErrorMessage = () => {
     <ErrorStyled>
         {alert.map((erro) => {
           return (
-            <Box
+            <Badge colorScheme='red'
             key={erro.message}
-              borderRadius="5px"
-              bg="tomato"
+              borderRadius="md"
+              px={4}
               h="40px"
-              w="100%"
+              w="80%"
               p="10px 10px 10px 10px"
               m="10px 10px 10px 10px"
             >
               <h1>{erro.message}</h1>
-            </Box>
+              </Badge>
           );
         })}
     </ErrorStyled>
