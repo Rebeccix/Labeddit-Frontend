@@ -1,23 +1,33 @@
-import { useContext, useEffect } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
-import { Text, Flex, Image } from "@chakra-ui/react";
-import { theme } from "../../styles/theme";
-import { like, dislike, comment } from "../../assets";
+import { Text, Flex, Image, Slide, useDisclosure } from "@chakra-ui/react";
 import { goToCommentary } from "../../routes/coordinator";
+import { like, dislike, comment } from "../../assets";
 import { useNavigate } from "react-router-dom";
-import { PostsCardStyled } from "./styled";
-import { exit } from "../../assets";
 import { BASE_URL } from "../../constants/url";
-import axios from "axios";
+import { ErrorMessage } from "../errorMessage";
+import { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { PostsCardStyled } from "./styled";
+import { theme } from "../../styles/theme";
+import { exit } from "../../assets";
 import { Loading } from "../loading";
-import { useParams } from "react-router-dom"
+import axios from "axios";
 
 export const PostCard = () => {
+  const { isOpen, onToggle } = useDisclosure();
   const context = useContext(GlobalContext);
-  const { posts, postCommentPage, getPosts, getCommentaries, likeDislikePostButton } =
-    context;
+  const {
+    posts,
+    postCommentPage,
+    getPosts,
+    getCommentaries,
+    likeDislikePostButton,
+    popUp,
+    setPopUp,
+    setAlert,
+  } = context;
   const { id } = useParams();
-  const idParams = id
+  const idParams = id;
   const navigate = useNavigate();
   const href = window.location.href;
 
@@ -49,17 +59,26 @@ export const PostCard = () => {
       await axios.delete(`${BASE_URL}/${data}/${id}`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
-      data === "posts" ?
-      getPosts()
-      :
-      getCommentaries(idParams)
+      data === "posts" ? getPosts() : getCommentaries(idParams);
     } catch (error) {
-      alert(error.response.data.message);
+      onToggle();
+      setPopUp(false);
+      setAlert(error.response.data);
     }
   };
 
+  if (!popUp) {
+    setTimeout(() => {
+      onToggle();
+      setPopUp(true);
+    }, 7000);
+  }
+
   return (
     <>
+      <Slide direction="left" in={isOpen}>
+        <ErrorMessage />
+      </Slide>
       <PostsCardStyled>
         {href.includes("posts") ? (
           posts.length === 0 ? (
@@ -113,10 +132,7 @@ export const PostCard = () => {
                       cursor="pointer"
                       onClick={() => goToCommentary(navigate, data.id)}
                     >
-                      <Image
-                        src={comment}
-                        alt="botão de comentario"
-                      />
+                      <Image src={comment} alt="botão de comentario" />
                       <Text
                         color={theme.color.likeDislikeCommentButtonColor}
                         fontSize={theme.fontSizes.likeDislikeCommentButton}
