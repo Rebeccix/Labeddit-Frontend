@@ -46,6 +46,12 @@ export const PostsPage = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.code === "Enter") {
+      onSubmit();
+    }
+  };
+
   return (
     <>
       <Header />
@@ -55,6 +61,7 @@ export const PostsPage = () => {
           value={textBox}
           onChange={onChangeInputs}
           placeholder="Escreva seu post..."
+          onKeyDown={handleKeyPress}
         />
         <Button
           mt="12px"

@@ -10,11 +10,10 @@ export const PostsCardStyled = styled.div`
         background-color: ${theme.color.postBg};
         border: 1px solid ${theme.color.postBorderColor};
         border-radius: 12px;
-        padding: 9px 19px 9px 10px;
+        padding: 9px 9px 9px 10px;
 
         div {
             display: flex;
-
             div {
                 display: flex;
                 align-items: center;

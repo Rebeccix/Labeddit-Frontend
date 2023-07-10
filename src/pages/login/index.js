@@ -65,7 +65,7 @@ export const LoginPage = () => {
     setTimeout(() => {
       onToggle();
       setPopUp(true);
-    }, 7000);
+    }, 2000);
   }
 
   return (

@@ -6,12 +6,18 @@ import { like, dislike, comment } from "../../assets";
 import { goToCommentary } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
 import { PostsCardStyled } from "./styled";
+import { exit } from "../../assets";
 import { BASE_URL } from "../../constants/url";
 import axios from "axios";
+import { Loading } from "../loading";
+import { useParams } from "react-router-dom"
 
 export const PostCard = () => {
   const context = useContext(GlobalContext);
-  const { posts, comments, getPosts, getCommentaries, likeDislikePostButton } = context;
+  const { posts, postCommentPage, getPosts, getCommentaries, likeDislikePostButton } =
+    context;
+  const { id } = useParams();
+  const idParams = id
   const navigate = useNavigate();
   const href = window.location.href;
 
@@ -32,7 +38,21 @@ export const PostCard = () => {
           },
         }
       );
-      getCommentaries(comments.id)
+      getCommentaries(postCommentPage.id);
+    } catch (error) {
+      alert(error.response.data.message);
+    }
+  };
+
+  const DeletePostOrCommentary = async (id, data) => {
+    try {
+      await axios.delete(`${BASE_URL}/${data}/${id}`, {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+      data === "posts" ?
+      getPosts()
+      :
+      getCommentaries(idParams)
     } catch (error) {
       alert(error.response.data.message);
     }
@@ -41,16 +61,28 @@ export const PostCard = () => {
   return (
     <>
       <PostsCardStyled>
-        {href.includes("posts")
-          ? posts.map((data) => {
+        {href.includes("posts") ? (
+          posts.length === 0 ? (
+            <Loading />
+          ) : (
+            posts.map((data) => {
               return (
                 <div className="Container-posts" key={data.id}>
-                  <Text
-                    fontSize={theme.fontSizes.sendedby}
-                    color={theme.color.postTextColor}
-                  >
-                    Enviado por: {data.name}
-                  </Text>
+                  <Flex justify="space-between">
+                    <Text
+                      fontSize={theme.fontSizes.sendedby}
+                      color={theme.color.postTextColor}
+                    >
+                      Enviado por: {data.name}
+                    </Text>
+                    <Image
+                      cursor="pointer"
+                      boxSize="18px"
+                      src={exit}
+                      alt=""
+                      onClick={() => DeletePostOrCommentary(data.id, "posts")}
+                    />
+                  </Flex>
                   <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
                     {data.content}
                   </Text>
@@ -78,10 +110,10 @@ export const PostCard = () => {
                     <Flex
                       w="65.33px"
                       h="27.89px"
+                      cursor="pointer"
                       onClick={() => goToCommentary(navigate, data.id)}
                     >
                       <Image
-                        cursor="pointer"
                         src={comment}
                         alt="botão de comentario"
                       />
@@ -96,47 +128,63 @@ export const PostCard = () => {
                 </div>
               );
             })
-          : comments.commentaries.map((data) => {
-              return (
-                <div className="Container-posts" key={data.idCommentary}>
+          )
+        ) : postCommentPage.commentaries.length === 0 ? (
+          <Loading />
+        ) : (
+          postCommentPage.commentaries.map((data) => {
+            return (
+              <div className="Container-posts" key={data.idCommentary}>
+                <Flex justify="space-between">
                   <Text
                     fontSize={theme.fontSizes.sendedby}
                     color={theme.color.postTextColor}
                   >
                     Enviado por: {data.creatorName}
                   </Text>
-                  <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
-                    {data.contentCommentary}
-                  </Text>
-                  <div>
-                    <Flex align="space-between" w="98px" h="27.89px" mr="10px">
-                      <Image
-                        cursor="pointer"
-                        src={like}
-                        alt="botão de like"
-                        onClick={() =>
-                          likeDislikeCommentaryButton(data.idCommentary, true)
-                        }
-                      />
-                      <Text
-                        color={theme.color.likeDislikeCommentButtonColor}
-                        fontSize={theme.fontSizes.likeDislikeCommentButton}
-                      >
-                        {data.likeCommentary - data.dislikeCommentary}
-                      </Text>
-                      <Image
-                        cursor="pointer"
-                        src={dislike}
-                        alt="botão de dislike"
-                        onClick={() =>
-                          likeDislikeCommentaryButton(data.idCommentary, false)
-                        }
-                      />
-                    </Flex>
-                  </div>
+                  <Image
+                    cursor="pointer"
+                    boxSize="18px"
+                    src={exit}
+                    alt=""
+                    onClick={() =>
+                      DeletePostOrCommentary(data.idCommentary, "commentary")
+                    }
+                  />
+                </Flex>
+                <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
+                  {data.contentCommentary}
+                </Text>
+                <div>
+                  <Flex align="space-between" w="98px" h="27.89px" mr="10px">
+                    <Image
+                      cursor="pointer"
+                      src={like}
+                      alt="botão de like"
+                      onClick={() =>
+                        likeDislikeCommentaryButton(data.idCommentary, true)
+                      }
+                    />
+                    <Text
+                      color={theme.color.likeDislikeCommentButtonColor}
+                      fontSize={theme.fontSizes.likeDislikeCommentButton}
+                    >
+                      {data.likeCommentary - data.dislikeCommentary}
+                    </Text>
+                    <Image
+                      cursor="pointer"
+                      src={dislike}
+                      alt="botão de dislike"
+                      onClick={() =>
+                        likeDislikeCommentaryButton(data.idCommentary, false)
+                      }
+                    />
+                  </Flex>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })
+        )}
       </PostsCardStyled>
     </>
   );
