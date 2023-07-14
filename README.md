@@ -26,7 +26,7 @@ npm install
 
 ## Configuração
 
-- REACT_APP_API_BASE_URL: A URL base da API do Labeddit Backend.
+- BASE_URL: A URL base da API do Labeddit Backend.
 
 ## Uso
 
