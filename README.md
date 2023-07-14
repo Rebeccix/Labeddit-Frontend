@@ -35,10 +35,3 @@ npm start
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir uma pull request com melhorias, correções de bugs ou novos recursos.
-## Contato
-
-Se você tiver alguma dúvida ou sugestão sobre o projeto, entre em contato comigo pelo e-mail [seu-email@example.com](mailto:seu-email@example.com).
-
-## Agradecimentos
-
-Agradeço a todos os contribuidores e usuários que ajudaram a tornar o Labeddit Frontend uma realidade. Seu apoio é fundamental para o desenvolvimento contínuo do projeto.
