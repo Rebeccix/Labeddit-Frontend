@@ -1,5 +1,12 @@
 import { GlobalContext } from "../../context/GlobalContext";
-import { Text, Flex, Image, Slide, useDisclosure } from "@chakra-ui/react";
+import {
+  Text,
+  Flex,
+  Image,
+  Slide,
+  useDisclosure,
+  Fade,
+} from "@chakra-ui/react";
 import { goToCommentary } from "../../routes/coordinator";
 import { like, dislike, comment } from "../../assets";
 import { useNavigate } from "react-router-dom";
@@ -86,62 +93,72 @@ export const PostCard = () => {
           ) : (
             posts.map((data) => {
               return (
-                <div className="Container-posts" key={data.id}>
-                  <Flex justify="space-between">
-                    <Text
-                      fontSize={theme.fontSizes.sendedby}
-                      color={theme.color.postTextColor}
-                    >
-                      Enviado por: {data.name}
+                <Fade in={true}>
+                  <div className="Container-posts" key={data.id}>
+                    <Flex 
+                    align="center"
+                    justify="space-between">
+                      <Text
+                        fontSize={theme.fontSizes.sendedby}
+                        color={theme.color.postTextColor}
+                      >
+                        Enviado por: {data.name}
+                      </Text>
+                      <Image
+                        cursor="pointer"
+                        boxSize="18px"
+                        src={exit}
+                        alt=""
+                        onClick={() => DeletePostOrCommentary(data.id, "posts")}
+                      />
+                    </Flex>
+                    <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
+                      {data.content}
                     </Text>
-                    <Image
-                      cursor="pointer"
-                      boxSize="18px"
-                      src={exit}
-                      alt=""
-                      onClick={() => DeletePostOrCommentary(data.id, "posts")}
-                    />
-                  </Flex>
-                  <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
-                    {data.content}
-                  </Text>
-                  <div>
-                    <Flex align="space-between" w="98px" h="27.89px" mr="10px">
-                      <Image
-                        cursor="pointer"
-                        src={like}
-                        alt="botão de like"
-                        onClick={() => likeDislikePostButton(data.id, true)}
-                      />
-                      <Text
-                        color={theme.color.likeDislikeCommentButtonColor}
-                        fontSize={theme.fontSizes.likeDislikeCommentButton}
+                    <div>
+                      <Flex
+                        align="space-between"
+                        w="98px"
+                        h="27.89px"
+                        mr="10px"
                       >
-                        {data.like - data.dislike}
-                      </Text>
-                      <Image
+                        <Image
+                          cursor="pointer"
+                          src={like}
+                          alt="botão de like"
+                          borderRadius='full'
+                          onClick={() => likeDislikePostButton(data.id, true)}
+                        />
+                        <Text
+                          color={theme.color.likeDislikeCommentButtonColor}
+                          fontSize={theme.fontSizes.likeDislikeCommentButton}
+                        >
+                          {data.like - data.dislike}
+                        </Text>
+                        <Image
+                          cursor="pointer"
+                          src={dislike}
+                          alt="botão de dislike"
+                          onClick={() => likeDislikePostButton(data.id, false)}
+                        />
+                      </Flex>
+                      <Flex
+                        w="65.33px"
+                        h="27.89px"
                         cursor="pointer"
-                        src={dislike}
-                        alt="botão de dislike"
-                        onClick={() => likeDislikePostButton(data.id, false)}
-                      />
-                    </Flex>
-                    <Flex
-                      w="65.33px"
-                      h="27.89px"
-                      cursor="pointer"
-                      onClick={() => goToCommentary(navigate, data.id)}
-                    >
-                      <Image src={comment} alt="botão de comentario" />
-                      <Text
-                        color={theme.color.likeDislikeCommentButtonColor}
-                        fontSize={theme.fontSizes.likeDislikeCommentButton}
+                        onClick={() => goToCommentary(navigate, data.id)}
                       >
-                        {data.comments}
-                      </Text>
-                    </Flex>
+                        <Image src={comment} alt="botão de comentario" />
+                        <Text
+                          color={theme.color.likeDislikeCommentButtonColor}
+                          fontSize={theme.fontSizes.likeDislikeCommentButton}
+                        >
+                          {data.comments}
+                        </Text>
+                      </Flex>
+                    </div>
                   </div>
-                </div>
+                </Fade>
               );
             })
           )
@@ -150,54 +167,56 @@ export const PostCard = () => {
         ) : (
           postCommentPage.commentaries.map((data) => {
             return (
-              <div className="Container-posts" key={data.idCommentary}>
-                <Flex justify="space-between">
-                  <Text
-                    fontSize={theme.fontSizes.sendedby}
-                    color={theme.color.postTextColor}
-                  >
-                    Enviado por: {data.creatorName}
-                  </Text>
-                  <Image
-                    cursor="pointer"
-                    boxSize="18px"
-                    src={exit}
-                    alt=""
-                    onClick={() =>
-                      DeletePostOrCommentary(data.idCommentary, "commentary")
-                    }
-                  />
-                </Flex>
-                <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
-                  {data.contentCommentary}
-                </Text>
-                <div>
-                  <Flex align="space-between" w="98px" h="27.89px" mr="10px">
-                    <Image
-                      cursor="pointer"
-                      src={like}
-                      alt="botão de like"
-                      onClick={() =>
-                        likeDislikeCommentaryButton(data.idCommentary, true)
-                      }
-                    />
+              <Fade in={true}>
+                <div className="Container-posts" key={data.idCommentary}>
+                  <Flex justify="space-between">
                     <Text
-                      color={theme.color.likeDislikeCommentButtonColor}
-                      fontSize={theme.fontSizes.likeDislikeCommentButton}
+                      fontSize={theme.fontSizes.sendedby}
+                      color={theme.color.postTextColor}
                     >
-                      {data.likeCommentary - data.dislikeCommentary}
+                      Enviado por: {data.creatorName}
                     </Text>
                     <Image
                       cursor="pointer"
-                      src={dislike}
-                      alt="botão de dislike"
+                      boxSize="18px"
+                      src={exit}
+                      alt=""
                       onClick={() =>
-                        likeDislikeCommentaryButton(data.idCommentary, false)
+                        DeletePostOrCommentary(data.idCommentary, "commentary")
                       }
                     />
                   </Flex>
+                  <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
+                    {data.contentCommentary}
+                  </Text>
+                  <div>
+                    <Flex align="space-between" w="98px" h="27.89px" mr="10px">
+                      <Image
+                        cursor="pointer"
+                        src={like}
+                        alt="botão de like"
+                        onClick={() =>
+                          likeDislikeCommentaryButton(data.idCommentary, true)
+                        }
+                      />
+                      <Text
+                        color={theme.color.likeDislikeCommentButtonColor}
+                        fontSize={theme.fontSizes.likeDislikeCommentButton}
+                      >
+                        {data.likeCommentary - data.dislikeCommentary}
+                      </Text>
+                      <Image
+                        cursor="pointer"
+                        src={dislike}
+                        alt="botão de dislike"
+                        onClick={() =>
+                          likeDislikeCommentaryButton(data.idCommentary, false)
+                        }
+                      />
+                    </Flex>
+                  </div>
                 </div>
-              </div>
+              </Fade>
             );
           })
         )}

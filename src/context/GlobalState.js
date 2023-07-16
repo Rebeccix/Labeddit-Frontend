@@ -4,17 +4,17 @@ import { useState } from "react";
 import { BASE_URL } from "../constants/url";
 
 export const GlobalState = (props) => {
-  let [posts, setPosts] = useState([]);
-  let [postCommentPage, setPostCommentPage] = useState([])
-  let [alert, setAlert] = useState([])
+  const [posts, setPosts] = useState([]);
+  const [postCommentPage, setPostCommentPage] = useState([])
+  const [alert, setAlert] = useState([])
   const [popUp, setPopUp] = useState(true)
 
-  const setAlertInfo = (text, type) => {
-    setAlert({
-      text,
-      type
-    })
-  }
+  // const setAlertInfo = (text, type) => {
+  //   setAlert({
+  //     text,
+  //     type
+  //   })
+  // }
 
   const getPosts = () => {
     axios.get(`${BASE_URL}/posts`, {

@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import { ErrorStyled } from "./styled";
-import { Badge } from "@chakra-ui/react";
+import { Badge, Box } from "@chakra-ui/react";
 import { WarningTwoIcon } from "@chakra-ui/icons";
 
 export const ErrorMessage = () => {
   const context = useContext(GlobalContext);
 
   const { alert } = context;
+  console.log(alert);
 
   return (
     <ErrorStyled>
@@ -15,10 +16,7 @@ export const ErrorMessage = () => {
         <>
           <Badge
             colorScheme="red"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            key=""
+            display="block"
             borderRadius="md"
             px={4}
             h="40px"
@@ -26,10 +24,13 @@ export const ErrorMessage = () => {
             p="10px 30px 10px 10px"
             m="10px 10px 10px 10px"
           >
-            <span>
-              {alert}
-            </span>
-            <WarningTwoIcon m="auto auto auto 10px" w="20px" h="20px" color="red.500" />
+            <span>{alert}</span>
+            <WarningTwoIcon
+              m="auto auto auto 10px"
+              w="20px"
+              h="20px"
+              color="red.500"
+            />
           </Badge>
         </>
       ) : (
@@ -43,11 +44,16 @@ export const ErrorMessage = () => {
               px={4}
               h="40px"
               w="auto"
-              p="10px 30px 10px 10px"
+              p="10px 10px 10px 10px"
               m="10px 10px 10px 10px"
             >
-              <h1>{erro.message}</h1>
-              <WarningTwoIcon w={8} h={8} color="red.500" />
+              <span>{erro.message}</span>
+              <WarningTwoIcon
+                m="auto auto auto 10px"
+                w="20px"
+                h="20px"
+                color="red.500"
+              />
             </Badge>
           );
         })

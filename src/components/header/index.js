@@ -29,6 +29,7 @@ export const Header = () => {
       <Spacer />
       <Button variant="link">
         <Image
+        // zIndex="sticky"
           boxSize="28px"
           cursor="cursor"
           src={logo}
