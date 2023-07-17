@@ -35,3 +35,8 @@ npm start
 ## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir uma pull request com melhorias, correções de bugs ou novos recursos.
+
+## Back-end 
+
+Repositório do back-end correspondente ao front-end do Labeddit 
+https://github.com/Rebeccix/Labeddit-Frontend
