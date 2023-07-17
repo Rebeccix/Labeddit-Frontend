@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const ErrorStyled = styled.div`
-    position: fixed;
+    position: absolute;
+    margin-top: 60px;
     
 
     div > div {

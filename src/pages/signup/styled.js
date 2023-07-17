@@ -6,7 +6,6 @@ export const SignupStyled = styled.div`
     align-items: center;
     text-align: center;
     padding: 0 32px 0 32px;
-    min-height: 110vh;
 
     div {
         display: flex;

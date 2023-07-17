@@ -1,7 +1,7 @@
 import { Router } from "./routes";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme } from "./styles/theme";
 import { GlobalState } from "./context/GlobalState";
+import { theme } from "./styles/theme";
 
 function App() {
   return (

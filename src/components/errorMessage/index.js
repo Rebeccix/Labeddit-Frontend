@@ -1,14 +1,13 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import { ErrorStyled } from "./styled";
-import { Badge, Box } from "@chakra-ui/react";
+import { Badge } from "@chakra-ui/react";
 import { WarningTwoIcon } from "@chakra-ui/icons";
 
 export const ErrorMessage = () => {
   const context = useContext(GlobalContext);
 
   const { alert } = context;
-  console.log(alert);
 
   return (
     <ErrorStyled>

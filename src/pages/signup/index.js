@@ -95,7 +95,7 @@ export const SignupPage = () => {
   return (
     <>
       <Slide direction="left" in={isOpen}>
-        <ErrorMessage />
+        <ErrorMessage/>
       </Slide>
       <Header />
       <SignupStyled>
