@@ -4,8 +4,17 @@ import { useState } from "react";
 import { BASE_URL } from "../constants/url";
 
 export const GlobalState = (props) => {
-  let [posts, setPosts] = useState([]);
-  let [comments, setComments] = useState([])
+  const [posts, setPosts] = useState([]);
+  const [postCommentPage, setPostCommentPage] = useState([])
+  const [alert, setAlert] = useState([])
+  const [popUp, setPopUp] = useState(true)
+
+  // const setAlertInfo = (text, type) => {
+  //   setAlert({
+  //     text,
+  //     type
+  //   })
+  // }
 
   const getPosts = () => {
     axios.get(`${BASE_URL}/posts`, {
@@ -16,8 +25,8 @@ export const GlobalState = (props) => {
     .then((res) => {
       setPosts(res.data)
     })
-    .catch((err) => {
-      alert(err.response.data.message)
+    .catch((error) => {
+      console.log(error)
     })
   }
 
@@ -28,8 +37,8 @@ export const GlobalState = (props) => {
           Authorization: localStorage.getItem("token"),
         },
       })
-      .then((response) => setComments(response.data))
-      .catch((error) => alert(error.response.data.message));
+      .then((response) => setPostCommentPage(response.data))
+      .catch((error) => console.log(error));
   };
 
   const likeDislikePostButton = async (id, like) => {
@@ -43,13 +52,17 @@ export const GlobalState = (props) => {
           },
         }
       );
+
+      window.location.href.includes("commentary") ? 
+      getCommentaries(id)
+      :
       getPosts();
     } catch (error) {
-      alert(error.response.data.message);
+      console.log(error);
     }
   };
 
-  let data = {posts, setPosts, comments, setComments, getPosts, getCommentaries, likeDislikePostButton};
+  let data = { posts, setPosts, postCommentPage, setPostCommentPage, getPosts, getCommentaries, likeDislikePostButton, alert ,setAlert, popUp, setPopUp};
 
   return (
     <GlobalContext.Provider value={data}>

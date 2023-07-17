@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { theme } from "../../styles/theme";
 import { Header } from "../../components/header";
+import { ErrorMessage } from "../../components/errorMessage";
 import {
   Heading,
   Text,
@@ -9,12 +10,15 @@ import {
   Button,
   Checkbox,
   Highlight,
+  Slide,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { SignupStyled } from "./styled";
 import { goToPosts } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../constants/url";
+import { GlobalContext } from "../../context/GlobalContext";
 
 export const SignupPage = () => {
   const [form, setForm] = useState({ nickname: "", email: "", password: "" });
@@ -22,10 +26,19 @@ export const SignupPage = () => {
   const [errorEmptyEmail, setErrorEmptyEmail] = useState(true);
   const [errorEmptyPassword, setErrorEmptyPassword] = useState(true);
   const [checkbox, setCheckbox] = useState(false);
+  const [checkboxError, setCheckboxError] = useState(true);
+
   const navigate = useNavigate();
+
+  const context = useContext(GlobalContext);
+
+  const { popUp, setPopUp, setAlert } = context;
+
+  const { isOpen, onToggle } = useDisclosure();
 
   const onchange = (e) => {
     setCheckbox(e);
+    checkbox === true ? setCheckboxError(false) : setCheckboxError(true);
   };
 
   const onChangeInputs = (e) => {
@@ -41,6 +54,7 @@ export const SignupPage = () => {
     form.password === ""
       ? setErrorEmptyPassword(false)
       : setErrorEmptyPassword(true);
+    checkbox === false ? setCheckboxError(false) : setCheckboxError(true);
 
     if (
       form.email !== "" &&
@@ -58,7 +72,9 @@ export const SignupPage = () => {
         localStorage.setItem("token", response.data.token);
         goToPosts(navigate);
       } catch (error) {
-        alert(error.response.data.message);
+        onToggle();
+        setPopUp(false);
+        setAlert(error.response.data);
       }
     }
   };
@@ -69,8 +85,18 @@ export const SignupPage = () => {
     }
   };
 
+  if (!popUp) {
+    setTimeout(() => {
+      onToggle();
+      setPopUp(true);
+    }, 7000);
+  }
+
   return (
     <>
+      <Slide direction="left" in={isOpen}>
+        <ErrorMessage/>
+      </Slide>
       <Header />
       <SignupStyled>
         <Heading
@@ -157,7 +183,7 @@ export const SignupPage = () => {
           >
             <Highlight
               query={["Contrato de usuário", "política de Privacidade"]}
-              styles={{ color: `${theme.color.highlight}` }}
+              styles={{ color: `${theme.color.highlight}`, cursor: "pointer" }}
             >
               Ao continuar, você concorda com o nosso Contrato de usuário e
               nossa política de Privacidade
@@ -175,7 +201,13 @@ export const SignupPage = () => {
               Eu concordo em receber emails sobre coisas legais no Labeddit
             </Text>
           </Checkbox>
-
+          {checkboxError === false ? (
+            <Text color="red" fontWeight={theme.fontWeights.bold}>
+              Deve ser marcado para prosseguir
+            </Text>
+          ) : (
+            <></>
+          )}
           <Button
             mt="28px"
             w={[theme.sizes.width.buttonWidth, "70vw", "50vw"]}

@@ -22,7 +22,7 @@ export const CommentaryPage = () => {
   const navigate = useNavigate();
 
   const context = useContext(GlobalContext);
-  const { comments, getCommentaries, likeDislikePostButton } = context;
+  const { postCommentPage, getCommentaries, likeDislikePostButton } = context;
 
   useEffect(() => {
     getCommentaries(id);
@@ -38,7 +38,7 @@ export const CommentaryPage = () => {
     } else {
       try {
         await axios.post(
-          `${BASE_URL}/commentary/${comments.id}`,
+          `${BASE_URL}/commentary/${postCommentPage.id}`,
           { content: textBox },
           {
             headers: {
@@ -47,47 +47,54 @@ export const CommentaryPage = () => {
           }
         );
         getCommentaries(id);
+        setTextBox("")
       } catch (error) {
         alert(error.response.data.message);
       }
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.code === "Enter") {
+      onSubmit();
+    }
+  };
+
   return (
     <>
       <Header />
-      {comments.length === 0 ? (
+      {postCommentPage.length === 0 ? (
         <></>
       ) : (
         <CommentaryStyled>
-          <div className="Container-posts" key={comments.id}>
+          <div className="Container-posts" key={postCommentPage.id}>
             <Text
               fontSize={theme.fontSizes.sendedby}
               color={theme.color.postTextColor}
             >
-              Enviado por: {comments.creatorName}
+              Enviado por: {postCommentPage.creatorName}
             </Text>
             <Text mt="18px" mb="18px" fontSize={theme.fontSizes.post}>
-              {comments.content}
+              {postCommentPage.content}
             </Text>
             <div>
               <Flex align="space-between" w="98px" h="27.89px" mr="10px">
-                <Image cursor="pointer" src={like} alt="botão de like" onClick={() => likeDislikePostButton(comments.id, true)}/>
+                <Image cursor="pointer" src={like} alt="botão de like" onClick={() => likeDislikePostButton(postCommentPage.id, true)}/>
                 <Text
                   color={theme.color.likeDislikeCommentButtonColor}
                   fontSize={theme.fontSizes.likeDislikeCommentButton}
                 >
-                  {comments.like - comments.dislike}
+                  {postCommentPage.like - postCommentPage.dislike}
                 </Text>
-                <Image cursor="pointer" src={dislike} alt="botão de dislike" onClick={() => likeDislikePostButton(comments.id, false)}/>
+                <Image cursor="pointer" src={dislike} alt="botão de dislike" onClick={() => likeDislikePostButton(postCommentPage.id, false)}/>
               </Flex>
               <Flex
                 w="65.33px"
                 h="27.89px"
-                onClick={() => goToCommentary(navigate, comments.id)}
+                cursor="pointer"
+                onClick={() => goToCommentary(navigate, postCommentPage.id)}
               >
                 <Image
-                  cursor="pointer"
                   src={comment}
                   alt="botão de comentario"
                 />
@@ -95,7 +102,7 @@ export const CommentaryPage = () => {
                   color={theme.color.likeDislikeCommentButtonColor}
                   fontSize={theme.fontSizes.likeDislikeCommentButton}
                 >
-                  {comments.commentaries.length}
+                  {postCommentPage.commentaries.length}
                 </Text>
               </Flex>
             </div>
@@ -106,6 +113,7 @@ export const CommentaryPage = () => {
             value={textBox}
             onChange={onChangeInputs}
             placeholder="Adicionar um comentário"
+            onKeyDown={handleKeyPress}
           />
           <Button
             mt="12px"
