@@ -39,4 +39,4 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir uma pull request
 ## Back-end 
 
 Repositório do back-end correspondente ao front-end do Labeddit 
-https://github.com/Rebeccix/Labeddit-Frontend
+https://github.com/Rebeccix/Labeddit-Backend
